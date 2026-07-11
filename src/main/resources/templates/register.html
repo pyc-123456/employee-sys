@@ -5,56 +5,258 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>注册 - 员工管理系统</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --dark-bg: #1e293b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-container {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .register-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .register-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .register-icon i {
+            font-size: 36px;
+            color: #fff;
+        }
+
+        .register-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+            margin-bottom: 4px;
+        }
+
+        .register-subtitle {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+            font-size: 0.875rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            outline: none;
+            background: #fff;
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+        .input-group-icon {
+            position: relative;
+        }
+
+        .input-group-icon i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 16px;
+        }
+
+        .input-group-icon input {
+            padding-left: 42px;
+        }
+
+        .text-danger {
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="text-center">员工管理系统</h3>
-                        <h5 class="text-center text-muted">用户注册</h5>
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <div class="register-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h1 class="register-title">员工管理系统</h1>
+                <p class="register-subtitle">创建新账号，开始使用系统</p>
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <form th:action="@{/register}" method="post" th:object="${registerDTO}">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <div class="input-group-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="请输入用户名" required>
                     </div>
-                    <div class="card-body">
-                        <div th:if="${error}" class="alert alert-danger">
-                            <span th:text="${error}"></span>
-                        </div>
-                        <form th:action="@{/register}" method="post" th:object="${registerDTO}">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">用户名</label>
-                                <input type="text" class="form-control" id="username" th:field="*{username}" required>
-                                <div th:if="${#fields.hasErrors('username')}" class="text-danger">
-                                    <span th:errors="*{username}"></span>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">密码</label>
-                                <input type="password" class="form-control" id="password" th:field="*{password}" required>
-                                <div th:if="${#fields.hasErrors('password')}" class="text-danger">
-                                    <span th:errors="*{password}"></span>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirmPassword" class="form-label">确认密码</label>
-                                <input type="password" class="form-control" id="confirmPassword" th:field="*{confirmPassword}" required>
-                                <div th:if="${#fields.hasErrors('confirmPassword')}" class="text-danger">
-                                    <span th:errors="*{confirmPassword}"></span>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">邮箱（可选）</label>
-                                <input type="email" class="form-control" id="email" th:field="*{email}">
-                                <div th:if="${#fields.hasErrors('email')}" class="text-danger">
-                                    <span th:errors="*{email}"></span>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">注册</button>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center">
-                        <a href="/login" class="text-primary">已有账号？立即登录</a>
+                    <div th:if="${#fields.hasErrors('username')}" class="text-danger">
+                        <i class="fas fa-times-circle me-1"></i>
+                        <span th:errors="*{username}"></span>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="email">邮箱（可选）</label>
+                    <div class="input-group-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="请输入邮箱">
+                    </div>
+                    <div th:if="${#fields.hasErrors('email')}" class="text-danger">
+                        <i class="fas fa-times-circle me-1"></i>
+                        <span th:errors="*{email}"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <div class="input-group-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="请输入密码" required>
+                    </div>
+                    <div th:if="${#fields.hasErrors('password')}" class="text-danger">
+                        <i class="fas fa-times-circle me-1"></i>
+                        <span th:errors="*{password}"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">确认密码</label>
+                    <div class="input-group-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="form-control" id="confirmPassword" th:field="*{confirmPassword}" placeholder="请再次输入密码" required>
+                    </div>
+                    <div th:if="${#fields.hasErrors('confirmPassword')}" class="text-danger">
+                        <i class="fas fa-times-circle me-1"></i>
+                        <span th:errors="*{confirmPassword}"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-check me-2"></i>注 册
+                </button>
+            </form>
+
+            <div class="login-link">
+                <p>已有账号？<a href="/login">立即登录</a></p>
             </div>
         </div>
     </div>
