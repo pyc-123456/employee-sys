@@ -1,4 +1,4 @@
-xxpackage com.employeesys.service.impl;
+package com.employeesys.service.impl;
 
 import com.employeesys.dto.DepartmentDTO;
 import com.employeesys.entity.Department;
