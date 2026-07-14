@@ -1,7 +1,7 @@
 package com.employeesys.controller;
 
+import com.employeesys.dto.DtoConverter;
 import com.employeesys.dto.EmployeeDTO;
-import com.employeesys.entity.Department;
 import com.employeesys.entity.Employee;
 import com.employeesys.service.DepartmentService;
 import com.employeesys.service.EmployeeService;
@@ -48,19 +48,7 @@ public class EmployeeController {
     @GetMapping("/edit/{id}")
     public String editEmployee(@PathVariable Long id, Model model) {
         Employee employee = employeeService.findById(id);
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setId(employee.getId());
-        employeeDTO.setName(employee.getName());
-        employeeDTO.setGender(employee.getGender());
-        employeeDTO.setAge(employee.getAge());
-        employeeDTO.setPhone(employee.getPhone());
-        employeeDTO.setPosition(employee.getPosition());
-        employeeDTO.setHireDate(employee.getHireDate());
-        employeeDTO.setSalary(employee.getSalary());
-        if (employee.getDepartment() != null) {
-            employeeDTO.setDepartmentId(employee.getDepartment().getId());
-        }
-
+        EmployeeDTO employeeDTO = DtoConverter.toEmployeeDTO(employee);
         model.addAttribute("employeeDTO", employeeDTO);
         model.addAttribute("departments", departmentService.findAll());
         return "employee-form";
@@ -87,7 +75,7 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable Long id) {
         employeeService.delete(id);
         return "redirect:/employees";

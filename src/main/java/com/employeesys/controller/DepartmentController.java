@@ -1,5 +1,6 @@
 package com.employeesys.controller;
 
+import com.employeesys.dto.DtoConverter;
 import com.employeesys.dto.DepartmentDTO;
 import com.employeesys.entity.Department;
 import com.employeesys.service.DepartmentService;
@@ -36,11 +37,7 @@ public class DepartmentController {
 
     @GetMapping("/edit/{id}")
     public String editDepartment(@PathVariable Long id, Model model) {
-        Department department = departmentService.findById(id);
-        DepartmentDTO departmentDTO = new DepartmentDTO();
-        departmentDTO.setId(department.getId());
-        departmentDTO.setName(department.getName());
-        departmentDTO.setDescription(department.getDescription());
+        DepartmentDTO departmentDTO = DtoConverter.toDepartmentDTO(departmentService.findById(id));
         model.addAttribute("departmentDTO", departmentDTO);
         return "department-form";
     }
@@ -64,7 +61,7 @@ public class DepartmentController {
         }
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteDepartment(@PathVariable Long id) {
         departmentService.delete(id);
         return "redirect:/departments";
